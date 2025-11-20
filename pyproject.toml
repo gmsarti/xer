@@ -1,0 +1,36 @@
+[project]
+name = "xer"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "fastapi>=0.121.2",
+    "langchain>=1.0.7",
+    "langgraph>=1.0.3",
+    "pandas>=2.3.3",
+    "pydantic-settings>=2.12.0",
+    "pytest>=9.0.1",
+    "taskipy>=1.14.1",
+    "uvicorn[standard]>=0.38.0",
+]
+
+[dependency-groups]
+dev = [
+    "ipykernel>=7.1.0",
+    "matplotlib>=3.10.7",
+    "seaborn>=0.13.2",
+    "ruff>0.4.0",
+]
+scraper = [
+    "beautifulsoup4>=4.14.2",
+]
+
+[tool.taskipy.tasks]
+run = "uvicorn main:app --host 0.0.0.0 --port 8000 --reload"
+lint = "ruff check ."
+format = "ruff format ."
+test = "pytest -q"
+docker-build = "docker build -t xer:latest ."
+docker-run = "docker run --rm -p 8000:8000 xer:latest"
+docker-pull = "docker stop $(docker ps -q --filter ancestor=xer:latest) || true && docker pull xer:latest"

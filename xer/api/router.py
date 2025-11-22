@@ -2,7 +2,10 @@ from fastapi import APIRouter, status
 from pydantic import BaseModel
 from fastapi.responses import JSONResponse
 
+from xer.api.tales import router as tales_router
+
 router = APIRouter(prefix="/api/v1", tags=["Hello World"])
+router.include_router(tales_router)
 
 
 @router.get("/hello", response_class=JSONResponse, status_code=status.HTTP_200_OK)

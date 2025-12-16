@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Explore e leia contos de fadas classificados por estruturas narrativas">
+    
+    <!-- Open Graph -->
+    <meta property="og:title" content="Xer - Explorar Contos de Fadas">
+    <meta property="og:description" content=" Descubra histórias fascinantes organizadas por padrões narrativos">
+    <meta property="og:type" content="website">
+    
+    <title>{% block title %}Xer - Contos de Fadas{% endblock %}</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+    
+    <!-- Stylesheet -->
+    <link rel="stylesheet" href="{{ url_for('static', path='/css/main.css') }}">
+    
+    {% block extra_head %}{% endblock %}
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <h1 class="logo">Xer</h1>
+            <nav class="nav">
+                <a href="/" class="nav-link">Início</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="main">
+        {% block content %}{% endblock %}
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2025 Xer. Todos os direitos reservados.</p>
+        </div>
+    </footer>
+
+    {% block extra_scripts %}{% endblock %}
+</body>
+</html>

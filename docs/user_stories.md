@@ -9,10 +9,10 @@ Este documento captura as histórias de usuário do projeto, fornecendo uma vis�
 **Para que** eu possa descobrir histórias interessantes para ler
 
 ### Critérios de Aceitação
-- [ ] Homepage exibe uma lista visual de contos (cards/grid)
-- [ ] Cada card mostra título e preview do conto
-- [ ] Interface é visualmente atraente (design premium)
-- [ ] Paginação funciona corretamente para grandes volumes
+- [x] Homepage exibe uma lista visual de contos (cards/grid)
+- [x] Cada card mostra título e preview do conto
+- [x] Interface é visualmente atraente (design premium)
+- [x] Paginação funciona corretamente para grandes volumes
 
 ### Tarefas Relacionadas
 Ver [`docs/tasks/US-01_explorar_contos.md`](file:///Users/gustavosarti/Work/code/xer/docs/tasks/US-01_explorar_contos.md)

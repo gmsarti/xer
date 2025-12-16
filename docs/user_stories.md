@@ -28,6 +28,7 @@ Ver [`docs/tasks/US-01_explorar_contos.md`](file:///Users/gustavosarti/Work/code
 ### Critérios de Aceitação
 - [ ] Campo de busca textual funciona (título/conteúdo)
 - [ ] Filtros por classificação estão disponíveis (Propp, Booker)
+- [ ] Limitador do número de resultados é funcional
 - [ ] Resultados são relevantes e bem formatados
 - [ ] Busca é rápida (< 500ms para queries simples)
 
@@ -43,10 +44,10 @@ Ver [`docs/tasks/US-02_buscar_contos.md`](file:///Users/gustavosarti/Work/code/x
 **Para que** eu possa ler contos sem distrações
 
 ### Critérios de Aceitação
-- [ ] Tipografia otimizada para leitura (line-height, measure)
-- [ ] Layout limpo sem elementos visuais competindo
-- [ ] Metadados (classificações) visíveis mas não intrusivos
-- [ ] Navegação entre contos (próximo/anterior) disponível
+- [x] Tipografia otimizada para leitura (line-height, measure)
+- [x] Layout limpo sem elementos visuais competindo
+- [x] Metadados (classificações) visíveis mas não intrusivos
+- [x] Navegação entre contos (próximo/anterior) disponível
 
 ### Tarefas Relacionadas
 Ver [`docs/tasks/US-03_ler_contos.md`](file:///Users/gustavosarti/Work/code/xer/docs/tasks/US-03_ler_contos.md)

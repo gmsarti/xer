@@ -5,23 +5,23 @@
 ## Tarefas
 
 ### Backend
-- [ ] Criar função `get_tale(id)` em `xer/database.py`
-- [ ] Criar função `get_tale_classifications(tale_id)` para buscar metadados
-- [ ] Criar rota `GET /tales/{id}` em `main.py`
+- [x] Criar função `get_tale(id)` em `xer/database.py`
+- [x] Criar função `get_tale_classifications(tale_id)` para buscar metadados
+- [x] Criar rota `GET /tales/{id}` em `main.py`
 
 ### Frontend
-- [ ] Criar template `xer/templates/tale.html`:
-  - [ ] Layout em 2 colunas (desktop) ou 1 coluna (mobile):
+- [x] Criar template `xer/templates/tale.html`:
+  - [x] Layout em 2 colunas (desktop) ou 1 coluna (mobile):
     - **Main**: Texto do conto
     - **Sidebar**: Metadados e classificações
-  - [ ] Tipografia otimizada:
-    - [ ] Line-height: ~1.6-1.8
-    - [ ] Measure (largura): ~65-75 caracteres
-    - [ ] Font-size: 18-20px
-  - [ ] Título do conto destacado
-  - [ ] Navegação:
-    - [ ] Botão "← Voltar"
-    - [ ] Links "Próximo/Anterior conto" (opcional)
+  - [x] Tipografia otimizada:
+    - [x] Line-height: ~1.6-1.8
+    - [x] Measure (largura): ~65-75 caracteres
+    - [x] Font-size: 18-20px
+  - [x] Título do conto destacado
+  - [x] Navegação:
+    - [x] Botão "← Voltar"
+    - [x] Links "Próximo/Anterior conto" (opcional)
 
 ### Sidebar de Metadados
 - [ ] Exibir classificações de forma organizada:
@@ -31,11 +31,11 @@
 - [ ] Links para buscar contos com classificações similares
 
 ### Estilo
-- [ ] Fundo neutro para reduzir fadiga visual
-- [ ] Contraste adequado (WCAG AA)
-- [ ] Transições suaves ao carregar
+- [x] Fundo neutro para reduzir fadiga visual
+- [x] Contraste adequado (WCAG AA)
+- [x] Transições suaves ao carregar
 
 ### Testes
-- [ ] Testar leitura em diferentes dispositivos
-- [ ] Verificar acessibilidade (contraste, hierarquia)
-- [ ] Testar com contos de diferentes tamanhos
+- [x] Testar leitura em diferentes dispositivos
+- [x] Verificar acessibilidade (contraste, hierarquia)
+- [x] Testar com contos de diferentes tamanhos

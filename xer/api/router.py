@@ -32,6 +32,30 @@ async def homepage(request: Request) -> HTMLResponse:
     )
 
 
+@router.get("/tales/{tale_id}", response_class=HTMLResponse)
+async def tale_detail(request: Request, tale_id: int) -> HTMLResponse:
+    """Render the tale detail page optimized for reading.
+
+    Args:
+        request: FastAPI request object
+        tale_id: ID of the tale to display
+
+    Returns:
+        Rendered HTML template
+    """
+    from xer.database import get_tale
+
+    tale = get_tale(tale_id)
+    if not tale:
+        return templates.TemplateResponse(
+            "index.html",
+            {"request": request, "tales": [], "error": "Conto não encontrado"},
+            status_code=404,
+        )
+
+    return templates.TemplateResponse("tale.html", {"request": request, "tale": tale})
+
+
 @router.get(
     "/api/v1/hello", response_class=JSONResponse, status_code=status.HTTP_200_OK
 )

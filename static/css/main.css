@@ -322,6 +322,107 @@ body {
 }
 
 /* ========================================
+   TALE DETAIL PAGE (READING EXPERIENCE)
+   ======================================== */
+
+.tale-container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: var(--space-2xl) var(--space-lg);
+}
+
+.tale-header {
+    margin-bottom: var(--space-2xl);
+}
+
+.back-link {
+    display: inline-block;
+    color: var(--color-gold);
+    text-decoration: none;
+    font-weight: 600;
+    margin-bottom: var(--space-lg);
+    transition: color var(--transition-fast);
+}
+
+.back-link:hover {
+    color: var(--color-gold-hover);
+}
+
+.tale-title {
+    font-family: var(--font-serif);
+    font-size: 2.5rem;
+    font-weight: 600;
+    color: var(--color-text);
+    line-height: 1.2;
+    margin-bottom: var(--space-sm);
+}
+
+.tale-source {
+    font-size: 0.875rem;
+    color: var(--color-text-muted);
+    font-style: italic;
+}
+
+.tale-body {
+    margin-bottom: var(--space-3xl);
+}
+
+.tale-text {
+    max-width: 65ch;
+    /* Optimal reading measure: 65-75 characters */
+    margin: 0 auto;
+}
+
+.tale-paragraph {
+    font-family: var(--font-serif);
+    font-size: 1.1875rem;
+    /* 19px */
+    line-height: 1.8;
+    /* Optimal for reading */
+    color: var(--color-text);
+    margin-bottom: var(--space-lg);
+    text-align: justify;
+}
+
+.tale-paragraph:first-of-type::first-letter {
+    font-size: 3.5rem;
+    font-weight: 600;
+    float: left;
+    line-height: 0.85;
+    margin: 0.1em 0.1em 0 0;
+    color: var(--color-gold);
+    font-family: var(--font-serif);
+}
+
+.tale-navigation {
+    text-align: center;
+    padding-top: var(--space-2xl);
+    border-top: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+@media (prefers-color-scheme: dark) {
+    .tale-navigation {
+        border-top: 1px solid rgba(255, 255, 255, 0.1);
+    }
+}
+
+@media (max-width: 768px) {
+    .tale-title {
+        font-size: 2rem;
+    }
+
+    .tale-paragraph {
+        font-size: 1.0625rem;
+        /* 17px */
+        text-align: left;
+    }
+
+    .tale-paragraph:first-of-type::first-letter {
+        font-size: 2.5rem;
+    }
+}
+
+/* ========================================
    ANIMATIONS
    ======================================== */
 

@@ -31,7 +31,11 @@
         <div class="container">
             <h1 class="logo">Xer</h1>
             <nav class="nav">
-                <a href="/" class="nav-link">Início</a>
+                <a href="/" class="nav-link">Explorar</a>
+                <a href="/search" class="nav-link">Buscar</a>
+                <button id="theme-toggle" class="theme-toggle" aria-label="Mudar para modo escuro">
+                    🌙
+                </button>
             </nav>
         </div>
     </header>
@@ -42,9 +46,12 @@
 
     <footer class="footer">
         <div class="container">
-            <p>&copy; 2025 Xer. Todos os direitos reservados.</p>
+            <p>&copy; 2024 Xer. Contos de Fadas Organizados.</p>
         </div>
     </footer>
+
+    <!-- Theme Toggle Script -->
+    <script src="{{ url_for('static', path='/js/theme-toggle.js') }}"></script>
 
     {% block extra_scripts %}{% endblock %}
 </body>

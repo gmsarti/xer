@@ -5,55 +5,56 @@
 ## Tarefas
 
 ### CSS Base
-- [ ] Criar `static/css/main.css` com:
-  - [ ] CSS Reset/Normalize
-  - [ ] Variáveis CSS (custom properties):
-    - [ ] Paleta de cores (primária, secundária, neutros)
-    - [ ] Tipografia (family, sizes, weights)
-    - [ ] Espaçamento (scale: 4px, 8px, 16px, 24px, etc.)
-    - [ ] Bordas e sombras
-  - [ ] Tipografia global:
-    - [ ] Import de Google Fonts (Inter ou Outfit)
-    - [ ] Definir hierarchy (h1-h6, p, etc.)
-  - [ ] Utilitários de layout:
-    - [ ] Container responsivo
-    - [ ] Grid system
-    - [ ] Flexbox helpers
+- [x] Criar `static/css/main.css` com:
+  - [x] CSS Reset/Normalize
+  - [x] Variáveis CSS (custom properties):
+    - [x] Paleta de cores (cream, charcoal, gold-leaf)
+    - [x] Tipografia (Lora serif, Inter sans-serif)
+    - [x] Espaçamento (scale: xs, sm, md, lg, xl, 2xl, 3xl)
+    - [x] Bordas e sombras (sm, md, lg, xl)
+  - [x] Tipografia global:
+    - [x] Import de Google Fonts (Lora + Inter)
+    - [x] Definir hierarchy (h1-h6, p, etc.)
+  - [x] Utilitários de layout:
+    - [x] Container responsivo
+    - [x] Grid system (tales-grid)
+    - [x] Flexbox helpers (search-form)
 
 ### Componentes Reutilizáveis
-- [ ] Definir estilos para:
-  - [ ] `.card` - Cards de contos
-  - [ ] `.btn` - Botões (primary, secondary)
-  - [ ] `.badge` - Tags/badges para classificações
-  - [ ] `.input` - Campos de busca
-  - [ ] `.filter-group` - Grupos de checkboxes
+- [x] Definir estilos para:
+  - [x] `.card` - Cards de contos
+  - [x] `.btn` - Botões (primary com hover effects)
+  - [x] `.badge` - Tags/badges para classificações (3 variantes: primary, secondary, outline)
+  - [x] `.search-input` - Campos de busca
+  - [x] `.search-limit` - Dropdown de limite
+  - [x] `.filter-group` - Grupos de checkboxes
 
 ### Template Base
-- [ ] Criar `xer/templates/base.html`:
-  - [ ] Estrutura HTML5 semântica
-  - [ ] `<head>` com:
-    - [ ] Meta tags (charset, viewport, description)
-    - [ ] Open Graph tags
-    - [ ] Link para CSS
-  - [ ] `<body>` com:
-    - [ ] Header/navbar (fixo ou não)
-    - [ ] `{% block content %}` para páginas
-    - [ ] Footer (opcional)
-  - [ ] Link para JS (se necessário)
+- [x] Criar `xer/templates/base.html`:
+  - [x] Estrutura HTML5 semântica
+  - [x] `<head>` com:
+    - [x] Meta tags (charset, viewport, description)
+    - [x] Open Graph tags
+    - [x] Link para CSS
+  - [x] `<body>` com:
+    - [x] Header/navbar
+    - [x] `{% block content %}` para páginas
+    - [x] Footer
+  - [x] Link para JS (mínimo necessário)
 
 ### Responsividade
-- [ ] Definir breakpoints:
-  - [ ] Mobile: < 768px
-  - [ ] Tablet: 768px - 1024px
-  - [ ] Desktop: > 1024px
-- [ ] Testar em diferentes viewports
+- [x] Definir breakpoints:
+  - [x] Mobile: < 768px
+  - [x] Tablet/Desktop: > 768px
+- [x] Testar em diferentes viewports
 
 ### Acessibilidade
-- [ ] Garantir contraste WCAG AA
-- [ ] Estados de foco visíveis
-- [ ] Semântica HTML correta
+- [x] Garantir contraste WCAG AA
+- [x] Estados de foco visíveis (gold border)
+- [x] Semântica HTML correta
 
 ### Documentação
-- [ ] Criar `docs/design_system.md` (opcional) com:
-  - [ ] Paleta de cores documentada
-  - [ ] Exemplos de componentes
+- [x] Criar `docs/design_system.md` com:
+  - [x] Paleta de cores documentada
+  - [x] Exemplos de componentes
+  - [x] Guia de uso

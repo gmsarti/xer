@@ -61,10 +61,10 @@ Ver [`docs/tasks/US-03_ler_contos.md`](file:///Users/gustavosarti/Work/code/xer/
 **Para que** todas as páginas tenham aparência e comportamento uniforme
 
 ### Critérios de Aceitação
-- [ ] Paleta de cores definida (CSS variables)
-- [ ] Tipografia consistente em todas as páginas
-- [ ] Componentes reutilizáveis (cards, buttons, forms)
-- [ ] Código CSS é maintainable e organizado
+- [x] Paleta de cores definida (CSS variables)
+- [x] Tipografia consistente em todas as páginas
+- [x] Componentes reutilizáveis (cards, buttons, forms)
+- [x] Código CSS é maintainable e organizado
 
 ### Tarefas Relacionadas
 Ver [`docs/tasks/US-04_design_system.md`](file:///Users/gustavosarti/Work/code/xer/docs/tasks/US-04_design_system.md)

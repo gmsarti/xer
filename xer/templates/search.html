@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+
+{% block title %}
+{% if query %}Busca: {{ query }} - Xer{% else %}Buscar Contos - Xer{% endif %}
+{% endblock %}
+
+{% block content %}
+<section class="search-header">
+    <div class="container">
+        <form action="/search" method="get" class="search-form">
+            <input type="text" name="q" value="{{ query }}" placeholder="Buscar contos..." class="search-input"
+                aria-label="Buscar contos" autofocus>
+            <select name="limit" class="search-limit" aria-label="Número de resultados">
+                <option value="3" {% if limit==3 %}selected{% endif %}>3</option>
+                <option value="6" {% if limit==6 %}selected{% endif %}>6</option>
+                <option value="15" {% if limit==15 %}selected{% endif %}>15</option>
+                <option value="60" {% if limit==60 %}selected{% endif %}>60</option>
+                <option value="120" {% if limit==120 %}selected{% endif %}>120</option>
+            </select>
+            <button type="submit" class="btn btn-primary">Buscar</button>
+        </form>
+
+        {% if query %}
+        <p class="search-meta">
+            {{ count }} resultado{% if count != 1 %}s{% endif %} encontrado{% if count != 1 %}s{% endif %}
+            {% if query %} para <strong>"{{ query }}"</strong>{% endif %}
+            (mostrando até {{ limit }})
+        </p>
+        {% endif %}
+    </div>
+</section>
+
+<section class="results-section">
+    <div class="container">
+        {% if results %}
+        <div class="tales-grid">
+            {% for tale in results %}
+            <article class="card">
+                <div class="card-content">
+                    <h3 class="card-title">{{ tale.title }}</h3>
+                    <p class="card-preview">
+                        {{ tale.text[:200] }}{% if tale.text|length > 200 %}...{% endif %}
+                    </p>
+                </div>
+                <div class="card-footer">
+                    <a href="/tales/{{ tale.id }}" class="btn btn-primary">Ler Conto</a>
+                </div>
+            </article>
+            {% endfor %}
+        </div>
+        {% elif query %}
+        <div class="empty-state">
+            <p>Nenhum conto encontrado para "{{ query }}".</p>
+            <a href="/" class="btn btn-primary">Voltar à Página Inicial</a>
+        </div>
+        {% else %}
+        <div class="empty-state">
+            <p>Digite algo para buscar contos.</p>
+        </div>
+        {% endif %}
+    </div>
+</section>
+{% endblock %}

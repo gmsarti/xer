@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Explore e leia contos de fadas classificados por estruturas narrativas">
+
+    <!-- Open Graph -->
+    <meta property="og:title" content="Xer - Explorar Contos de Fadas">
+    <meta property="og:description" content=" Descubra histórias fascinantes organizadas por padrões narrativos">
+    <meta property="og:type" content="website">
+
+    <title>{% block title %}Xer - Contos de Fadas{% endblock %}</title>
+
+    <!-- Google Fonts: Lora (Serif) + Inter (Sans-serif) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&family=Lora:ital,wght@0,400;0,600;1,400&display=swap"
+        rel="stylesheet">
+
+    <!-- Stylesheet -->
+    <link rel="stylesheet" href="{{ url_for('static', path='/css/main.css') }}">
+
+    {% block extra_head %}{% endblock %}
+</head>
+
+<body>
+    <header class="header">
+        <div class="container">
+            <h1 class="logo">Xer</h1>
+            <nav class="nav">
+                <a href="/" class="nav-link">Explorar</a>
+                <a href="/search" class="nav-link">Buscar</a>
+                <button id="theme-toggle" class="theme-toggle" aria-label="Mudar para modo escuro">
+                    🌙
+                </button>
+            </nav>
+        </div>
+    </header>
+
+    <main class="main">
+        {% block content %}{% endblock %}
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2024 Xer. Contos de Fadas Organizados.</p>
+        </div>
+    </footer>
+
+    <!-- Theme Toggle Script -->
+    <script src="{{ url_for('static', path='/js/theme-toggle.js') }}"></script>
+
+    {% block extra_scripts %}{% endblock %}
+</body>
+
+</html>

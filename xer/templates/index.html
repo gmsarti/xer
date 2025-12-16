@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+
+{% block title %}Xer - Explore Contos de Fadas{% endblock %}
+
+{% block content %}
+<section class="hero">
+    <div class="container">
+        <h2 class="hero-title">Descubra Contos Fascinantes</h2>
+        <p class="hero-subtitle">Explore uma coleção de contos de fadas organizados por padrões narrativos</p>
+        <form action="/search" method="get" class="search-form">
+            <input type="text" name="q" placeholder="Buscar contos..." class="search-input" aria-label="Buscar contos">
+            <select name="limit" class="search-limit" aria-label="Número de resultados">
+                <option value="3">3</option>
+                <option value="6">6</option>
+                <option value="15">15</option>
+                <option value="60" selected>60</option>
+                <option value="120">120</option>
+            </select>
+            <button type="submit" class="btn btn-primary">Buscar</button>
+        </form>
+    </div>
+</section>
+
+<section class="tales-section">
+    <div class="container">
+        {% if tales %}
+        <div class="tales-grid">
+            {% for tale in tales %}
+            <article class="card">
+                <div class="card-content">
+                    <h3 class="card-title">{{ tale.title }}</h3>
+                    <p class="card-preview">
+                        {{ tale.text[:200] }}{% if tale.text|length > 200 %}...{% endif %}
+                    </p>
+                </div>
+                <div class="card-footer">
+                    <a href="/tales/{{ tale.id }}" class="btn btn-primary">Ler Conto</a>
+                </div>
+            </article>
+            {% endfor %}
+        </div>
+        {% else %}
+        <div class="empty-state">
+            <p>Nenhum conto disponível no momento.</p>
+        </div>
+        {% endif %}
+    </div>
+</section>
+{% endblock %}

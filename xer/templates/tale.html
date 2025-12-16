@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+
+{% block title %}{{ tale.title }} - Xer{% endblock %}
+
+{% block content %}
+<article class="tale-container">
+    <div class="tale-header">
+        <a href="/" class="back-link">← Voltar</a>
+        <h1 class="tale-title">{{ tale.title }}</h1>
+        {% if tale.source %}
+        <p class="tale-source">Fonte: {{ tale.source }}</p>
+        {% endif %}
+    </div>
+
+    <div class="tale-body">
+        <div class="tale-text">
+            {% for paragraph in tale.text.split('\n\n') %}
+            {% if paragraph.strip() %}
+            <p class="tale-paragraph">{{ paragraph }}</p>
+            {% endif %}
+            {% endfor %}
+        </div>
+    </div>
+
+    <nav class="tale-navigation">
+        <a href="/" class="btn btn-primary">Explorar Mais Contos</a>
+    </nav>
+</article>
+{% endblock %}

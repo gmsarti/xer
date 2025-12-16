@@ -15,6 +15,7 @@ Este documento estabelece os pilares fundamentais que guiam o desenvolvimento, d
 - **Arquitetura Pragmática**: Escolhemos a ferramenta certa para o estágio atual. Jinja2 + Server-Side Rendering (SSR) nos dá velocidade de desenvolvimento e SEO imediato sem a complexidade de um SPA neste momento.
 - **SEO por Padrão**: Sendo um arquivo de conteúdo, a indexabilidade é crítica. Semântica HTML, meta tags e performance são prioridade.
 - **Pythonic Core**: O backend segue as convenções modernas de Python (Type Hints, Pydantic, Ruff para linting). Código limpo e legível é mandato.
+- **Resource Management**: Sempre use context managers (`with` statement) para gerenciar recursos como conexões de banco de dados, arquivos, etc. Isso garante que recursos sejam sempre liberados corretamente, mesmo em caso de exceções.
 
 ## 3. Qualidade & Manutenibilidade
 - **Testes Automatizados**: Funcionalidades críticas devem ter testes. Confiança no deploy vem de uma suite de testes verde.

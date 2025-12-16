@@ -9,10 +9,10 @@ Este documento captura as histórias de usuário do projeto, fornecendo uma vis�
 **Para que** eu possa descobrir histórias interessantes para ler
 
 ### Critérios de Aceitação
-- [ ] Homepage exibe uma lista visual de contos (cards/grid)
-- [ ] Cada card mostra título e preview do conto
-- [ ] Interface é visualmente atraente (design premium)
-- [ ] Paginação funciona corretamente para grandes volumes
+- [x] Homepage exibe uma lista visual de contos (cards/grid)
+- [x] Cada card mostra título e preview do conto
+- [x] Interface é visualmente atraente (design premium)
+- [x] Paginação funciona corretamente para grandes volumes
 
 ### Tarefas Relacionadas
 Ver [`docs/tasks/US-01_explorar_contos.md`](file:///Users/gustavosarti/Work/code/xer/docs/tasks/US-01_explorar_contos.md)
@@ -26,10 +26,11 @@ Ver [`docs/tasks/US-01_explorar_contos.md`](file:///Users/gustavosarti/Work/code
 **Para que** eu possa encontrar histórias específicas ou padrões narrativos
 
 ### Critérios de Aceitação
-- [ ] Campo de busca textual funciona (título/conteúdo)
+- [x] Campo de busca textual funciona (título/conteúdo)
 - [ ] Filtros por classificação estão disponíveis (Propp, Booker)
-- [ ] Resultados são relevantes e bem formatados
-- [ ] Busca é rápida (< 500ms para queries simples)
+- [x] Limitador do número de resultados é funcional
+- [x] Resultados são relevantes e bem formatados
+- [x] Busca é rápida (< 500ms para queries simples)
 
 ### Tarefas Relacionadas
 Ver [`docs/tasks/US-02_buscar_contos.md`](file:///Users/gustavosarti/Work/code/xer/docs/tasks/US-02_buscar_contos.md)
@@ -43,10 +44,10 @@ Ver [`docs/tasks/US-02_buscar_contos.md`](file:///Users/gustavosarti/Work/code/x
 **Para que** eu possa ler contos sem distrações
 
 ### Critérios de Aceitação
-- [ ] Tipografia otimizada para leitura (line-height, measure)
-- [ ] Layout limpo sem elementos visuais competindo
-- [ ] Metadados (classificações) visíveis mas não intrusivos
-- [ ] Navegação entre contos (próximo/anterior) disponível
+- [x] Tipografia otimizada para leitura (line-height, measure)
+- [x] Layout limpo sem elementos visuais competindo
+- [x] Metadados (classificações) visíveis mas não intrusivos
+- [x] Navegação entre contos (próximo/anterior) disponível
 
 ### Tarefas Relacionadas
 Ver [`docs/tasks/US-03_ler_contos.md`](file:///Users/gustavosarti/Work/code/xer/docs/tasks/US-03_ler_contos.md)
@@ -60,10 +61,10 @@ Ver [`docs/tasks/US-03_ler_contos.md`](file:///Users/gustavosarti/Work/code/xer/
 **Para que** todas as páginas tenham aparência e comportamento uniforme
 
 ### Critérios de Aceitação
-- [ ] Paleta de cores definida (CSS variables)
-- [ ] Tipografia consistente em todas as páginas
-- [ ] Componentes reutilizáveis (cards, buttons, forms)
-- [ ] Código CSS é maintainable e organizado
+- [x] Paleta de cores definida (CSS variables)
+- [x] Tipografia consistente em todas as páginas
+- [x] Componentes reutilizáveis (cards, buttons, forms)
+- [x] Código CSS é maintainable e organizado
 
 ### Tarefas Relacionadas
 Ver [`docs/tasks/US-04_design_system.md`](file:///Users/gustavosarti/Work/code/xer/docs/tasks/US-04_design_system.md)

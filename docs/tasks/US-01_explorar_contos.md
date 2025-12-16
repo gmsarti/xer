@@ -5,26 +5,27 @@
 ## Tarefas
 
 ### Setup Inicial
-- [ ] Adicionar Jinja2 ao projeto: `uv add jinja2`
-- [ ] Criar estrutura de diretórios `xer/templates/` e `static/`
-- [ ] Configurar FastAPI para servir static files e templates
+- [x] Adicionar Jinja2 ao projeto: `uv add jinja2`
+- [x] Criar estrutura de diretórios `xer/templates/` e `static/`
+- [x] Configurar FastAPI para servir static files e templates
 
 ### Backend
-- [ ] Criar função `list_tales(limit, offset)` em `xer/database.py`
-- [ ] Criar rota `GET /` em `main.py` que renderiza a homepage
-- [ ] Passar lista de contos para o template
+- [x] Criar função `list_tales(limit, offset)` em `xer/database.py`
+- [x] Criar rota `GET /` em `main.py` que renderiza a homepage
+- [x] Passar lista de contos para o template
 
 ### Frontend
-- [ ] Criar template `xer/templates/index.html`:
-  - [ ] Hero section com título do site
-  - [ ] Grid responsivo de contos (cards)
-  - [ ] Paginação (se > 20 contos)
-- [ ] Estilizar cards de contos:
-  - [ ] Título visível
-  - [ ] Preview do texto (primeiras linhas)
-  - [ ] Hover effect (elevação/shadow)
-  - [ ] Link para página do conto
+- [x] Criar template `xer/templates/index.html`:
+  - [x] Hero section com título do site
+  - [x] Grid responsivo de contos (cards)
+  - [x] Paginação (se > 20 contos)
+- [x] Estilizar cards de contos:
+  - [x] Título visível
+  - [x] Preview do texto (primeiras linhas)
+  - [x] Hover effect (elevação/shadow)
+  - [x] Link para página do conto
 
 ### Testes
-- [ ] Testar listagem com diferentes quantidades de contos
-- [ ] Verificar responsividade (mobile/tablet/desktop)
+- [x] Testar listagem com diferentes quantidades de contos
+- [x] Verificar responsividade (mobile/tablet/desktop)
+

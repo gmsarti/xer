@@ -26,11 +26,11 @@ Ver [`docs/tasks/US-01_explorar_contos.md`](file:///Users/gustavosarti/Work/code
 **Para que** eu possa encontrar histórias específicas ou padrões narrativos
 
 ### Critérios de Aceitação
-- [ ] Campo de busca textual funciona (título/conteúdo)
+- [x] Campo de busca textual funciona (título/conteúdo)
 - [ ] Filtros por classificação estão disponíveis (Propp, Booker)
-- [ ] Limitador do número de resultados é funcional
-- [ ] Resultados são relevantes e bem formatados
-- [ ] Busca é rápida (< 500ms para queries simples)
+- [x] Limitador do número de resultados é funcional
+- [x] Resultados são relevantes e bem formatados
+- [x] Busca é rápida (< 500ms para queries simples)
 
 ### Tarefas Relacionadas
 Ver [`docs/tasks/US-02_buscar_contos.md`](file:///Users/gustavosarti/Work/code/xer/docs/tasks/US-02_buscar_contos.md)

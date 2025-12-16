@@ -39,29 +39,28 @@ def list_tales(limit: int = 20, offset: int = 0) -> list[dict[str, Any]]:
     Returns:
         List of tale dictionaries
     """
-    conn = get_connection()
-    cursor = conn.cursor()
-
     try:
-        cursor.execute(
-            """
-            SELECT id, titulo as title, texto_completo as text, origem as source
-            FROM tales
-            ORDER BY id DESC
-            LIMIT ? OFFSET ?
-            """,
-            (limit, offset),
-        )
+        with get_connection() as conn:
+            cursor = conn.cursor()
+            cursor.execute(
+                """
+                SELECT id, titulo as title, texto_completo as text, origem as source
+                FROM tales
+                ORDER BY id DESC
+                LIMIT ? OFFSET ?
+                """,
+                (limit, offset),
+            )
 
-        tales = [dict(row) for row in cursor.fetchall()]
-        logger.debug(f"Retrieved {len(tales)} tales (limit={limit}, offset={offset})")
-        return tales
+            tales = [dict(row) for row in cursor.fetchall()]
+            logger.debug(
+                f"Retrieved {len(tales)} tales (limit={limit}, offset={offset})"
+            )
+            return tales
 
     except sqlite3.Error as e:
         logger.error(f"Database error while listing tales: {e}")
         return []
-    finally:
-        conn.close()
 
 
 def get_tale(tale_id: int) -> dict[str, Any] | None:
@@ -73,26 +72,78 @@ def get_tale(tale_id: int) -> dict[str, Any] | None:
     Returns:
         Tale dictionary or None if not found
     """
-    conn = get_connection()
-    cursor = conn.cursor()
-
     try:
-        cursor.execute(
-            """
-            SELECT id, titulo as title, texto_completo as text, origem as source
-            FROM tales
-            WHERE id = ?
-            """,
-            (tale_id,),
-        )
+        with get_connection() as conn:
+            cursor = conn.cursor()
+            cursor.execute(
+                """
+                SELECT id, titulo as title, texto_completo as text, origem as source
+                FROM tales
+                WHERE id = ?
+                """,
+                (tale_id,),
+            )
 
-        row = cursor.fetchone()
-        if row:
-            return dict(row)
-        return None
+            row = cursor.fetchone()
+            if row:
+                return dict(row)
+            return None
 
     except sqlite3.Error as e:
         logger.error(f"Database error while fetching tale {tale_id}: {e}")
         return None
-    finally:
-        conn.close()
+
+
+def search_tales(query: str = "", limit: int = 50) -> list[dict[str, Any]]:
+    """Search tales by text query.
+
+    Args:
+        query: Search query (searches in title and text)
+        limit: Maximum number of results to return
+
+    Returns:
+        List of tale dictionaries matching the query
+    """
+    try:
+        with get_connection() as conn:
+            cursor = conn.cursor()
+
+            if not query or query.strip() == "":
+                # If no query, return recent tales
+                cursor.execute(
+                    """
+                    SELECT id, titulo as title, texto_completo as text, origem as source
+                    FROM tales
+                    ORDER BY id DESC
+                    LIMIT ?
+                    """,
+                    (limit,),
+                )
+            else:
+                # Search in title and text
+                search_pattern = f"%{query}%"
+                cursor.execute(
+                    """
+                    SELECT id, titulo as title, texto_completo as text, origem as source
+                    FROM tales
+                    WHERE titulo LIKE ? OR texto_completo LIKE ?
+                    ORDER BY
+                        CASE
+                            WHEN titulo LIKE ? THEN 1
+                            ELSE 2
+                        END,
+                        id DESC
+                    LIMIT ?
+                    """,
+                    (search_pattern, search_pattern, search_pattern, limit),
+                )
+
+            tales = [dict(row) for row in cursor.fetchall()]
+            logger.debug(
+                f"Found {len(tales)} tales for query '{query}' (limit={limit})"
+            )
+            return tales
+
+    except sqlite3.Error as e:
+        logger.error(f"Database error while searching tales: {e}")
+        return []

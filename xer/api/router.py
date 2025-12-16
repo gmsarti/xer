@@ -56,6 +56,34 @@ async def tale_detail(request: Request, tale_id: int) -> HTMLResponse:
     return templates.TemplateResponse("tale.html", {"request": request, "tale": tale})
 
 
+@router.get("/search", response_class=HTMLResponse)
+async def search(request: Request, q: str = "", limit: int = 50) -> HTMLResponse:
+    """Render search results page.
+
+    Args:
+        request: FastAPI request object
+        q: Search query
+        limit: Maximum number of results
+
+    Returns:
+        Rendered HTML template with search results
+    """
+    from xer.database import search_tales
+
+    results = search_tales(query=q, limit=limit)
+
+    return templates.TemplateResponse(
+        "search.html",
+        {
+            "request": request,
+            "query": q,
+            "results": results,
+            "limit": limit,
+            "count": len(results),
+        },
+    )
+
+
 @router.get(
     "/api/v1/hello", response_class=JSONResponse, status_code=status.HTTP_200_OK
 )

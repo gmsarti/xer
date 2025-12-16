@@ -7,6 +7,17 @@
     <div class="container">
         <h2 class="hero-title">Descubra Contos Fascinantes</h2>
         <p class="hero-subtitle">Explore uma coleção de contos de fadas organizados por padrões narrativos</p>
+        <form action="/search" method="get" class="search-form">
+            <input type="text" name="q" placeholder="Buscar contos..." class="search-input" aria-label="Buscar contos">
+            <select name="limit" class="search-limit" aria-label="Número de resultados">
+                <option value="3">3</option>
+                <option value="6">6</option>
+                <option value="15">15</option>
+                <option value="60" selected>60</option>
+                <option value="120">120</option>
+            </select>
+            <button type="submit" class="btn btn-primary">Buscar</button>
+        </form>
     </div>
 </section>
 

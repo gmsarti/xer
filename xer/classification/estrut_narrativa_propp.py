@@ -1,4 +1,5 @@
 import json
+import os
 from pathlib import Path
 from typing import Literal, TypedDict
 
@@ -6,7 +7,7 @@ from langchain.chat_models import init_chat_model
 from langgraph.graph import END, START, StateGraph
 from pydantic import BaseModel, Field
 
-model = init_chat_model("gpt-4o-mini", model_provider="openai", temperature=0)
+# model = init_chat_model("gpt-4o-mini", model_provider="openai", temperature=0)
 
 # ====== DEFINIÇÕES DAS 33 FUNÇÕES DE PROPP ======
 PROPP_NARRATIVE_FUNCTIONS_SYSTEM_PROMPT = """
@@ -201,7 +202,13 @@ def clean_json_response(content: str) -> str:
 def node_identificar_funcoes(state: GraphState) -> GraphState:
     """Nó 1: Identifica as funções narrativas presentes no conto."""
     print("\n📖 Etapa 1: Identificando funções narrativas de Propp...")
-    model = init_chat_model("gpt-4o-mini", model_provider="openai", temperature=0)
+    model = init_chat_model(
+        "deepseek-chat",
+        model_provider="openai",
+        base_url="https://api.deepseek.com",
+        api_key=os.environ.get("DEEPSEEK_API_KEY"),
+        temperature=0,
+    )
     prompt = PROPP_NARRATIVE_FUNCTIONS_SYSTEM_PROMPT
     response = model.invoke(prompt)
     cleaned_content = clean_json_response(response.content)
@@ -232,7 +239,13 @@ def node_analisar_sequencia(state: GraphState) -> GraphState:
         )
         print("⚠️  Pulando análise - nenhuma função identificada")
         return state
-    model = init_chat_model("gpt-4o-mini", model_provider="openai", temperature=0)
+    model = init_chat_model(
+        "deepseek-chat",
+        model_provider="openai",
+        base_url="https://api.deepseek.com",
+        api_key=os.environ.get("DEEPSEEK_API_KEY"),
+        temperature=0,
+    )
     funcoes_str = json.dumps(
         state["funcoes_identificadas"], ensure_ascii=False, indent=2
     )

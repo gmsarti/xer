@@ -1,0 +1,11 @@
+{
+  "sqltools.connections": [
+    {
+      "previewLimit": 50,
+      "driver": "SQLite",
+      "name": "read-db",
+      "database": "${workspaceFolder:xer}/contos_propp_v2.sqlite"
+    }
+  ],
+  "sqltools.useNodeRuntime": true
+}

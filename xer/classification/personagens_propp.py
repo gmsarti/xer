@@ -9,6 +9,7 @@ from langchain.tools import tool
 from langchain.chat_models import init_chat_model
 from langchain_core.output_parsers import JsonOutputParser
 import json
+import os
 
 
 # ====== MODELOS PYDANTIC PARA OUTPUT PARSING ======
@@ -55,7 +56,13 @@ class GraphState(TypedDict):
 # ====== INICIALIZAR MODELO ======
 def obter_modelo():
     """Inicializa o modelo de forma limpa."""
-    return init_chat_model("gpt-4o-mini", model_provider="openai", temperature=0)
+    return init_chat_model(
+        "deepseek-chat",
+        model_provider="openai",
+        base_url="https://api.deepseek.com",
+        api_key=os.environ.get("DEEPSEEK_API_KEY"),
+        temperature=0,
+    )
 
 
 # ====== NÓS DO GRAFO ======

@@ -44,9 +44,11 @@ def list_tales(limit: int = 20, offset: int = 0) -> list[dict[str, Any]]:
             cursor = conn.cursor()
             cursor.execute(
                 """
-                SELECT id, titulo as title, texto_completo as text, origem as source
-                FROM tales
-                ORDER BY id DESC
+                SELECT t.id, tr.title as title, tr.story_body as text, t.source as source
+                FROM tales t
+                JOIN tale_translations tr ON t.id = tr.tale_id
+                WHERE tr.language_code = 'en'
+                ORDER BY t.id DESC
                 LIMIT ? OFFSET ?
                 """,
                 (limit, offset),
@@ -77,9 +79,10 @@ def get_tale(tale_id: int) -> dict[str, Any] | None:
             cursor = conn.cursor()
             cursor.execute(
                 """
-                SELECT id, titulo as title, texto_completo as text, origem as source
-                FROM tales
-                WHERE id = ?
+                SELECT t.id, tr.title as title, tr.story_body as text, t.source as source
+                FROM tales t
+                JOIN tale_translations tr ON t.id = tr.tale_id
+                WHERE t.id = ? AND tr.language_code = 'en'
                 """,
                 (tale_id,),
             )
@@ -112,9 +115,11 @@ def search_tales(query: str = "", limit: int = 50) -> list[dict[str, Any]]:
                 # If no query, return recent tales
                 cursor.execute(
                     """
-                    SELECT id, titulo as title, texto_completo as text, origem as source
-                    FROM tales
-                    ORDER BY id DESC
+                    SELECT t.id, tr.title as title, tr.story_body as text, t.source as source
+                    FROM tales t
+                    JOIN tale_translations tr ON t.id = tr.tale_id
+                    WHERE tr.language_code = 'en'
+                    ORDER BY t.id DESC
                     LIMIT ?
                     """,
                     (limit,),
@@ -124,15 +129,16 @@ def search_tales(query: str = "", limit: int = 50) -> list[dict[str, Any]]:
                 search_pattern = f"%{query}%"
                 cursor.execute(
                     """
-                    SELECT id, titulo as title, texto_completo as text, origem as source
-                    FROM tales
-                    WHERE titulo LIKE ? OR texto_completo LIKE ?
+                    SELECT t.id, tr.title as title, tr.story_body as text, t.source as source
+                    FROM tales t
+                    JOIN tale_translations tr ON t.id = tr.tale_id
+                    WHERE tr.language_code = 'en' AND (tr.title LIKE ? OR tr.story_body LIKE ?)
                     ORDER BY
                         CASE
-                            WHEN titulo LIKE ? THEN 1
+                            WHEN tr.title LIKE ? THEN 1
                             ELSE 2
                         END,
-                        id DESC
+                        t.id DESC
                     LIMIT ?
                     """,
                     (search_pattern, search_pattern, search_pattern, limit),

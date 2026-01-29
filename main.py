@@ -19,6 +19,17 @@ def create_app() -> FastAPI:
     """
     app = FastAPI(title="Xer API", version="0.1.0")
 
+    # Add CORS middleware
+    from fastapi.middleware.cors import CORSMiddleware
+
+    app.add_middleware(
+        CORSMiddleware,
+        allow_origins=["*"],
+        allow_credentials=True,
+        allow_methods=["*"],
+        allow_headers=["*"],
+    )
+
     # Mount static files
     app.mount("/static", StaticFiles(directory=str(STATIC_DIR)), name="static")
 

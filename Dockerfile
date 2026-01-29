@@ -19,14 +19,15 @@ FROM python:3.13-slim-bookworm AS production
 RUN useradd --create-home appuser
 USER appuser
 WORKDIR /app
-# Copia código da aplicação
+# Copia código da aplicação e arquivos estáticos
 COPY --chown=appuser:appuser xer/ xer/
 COPY --chown=appuser:appuser main.py .
+COPY --chown=appuser:appuser static/ static/
 # Copia o virtual‑env gerado no builder
 COPY --from=builder /app/.venv .venv
 # Adiciona o virtual‑env ao PATH
 ENV PATH="/app/.venv/bin:${PATH}"
 # Porta da API
 EXPOSE 8000
-# Inicia a aplicação
-CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000"]
+# Inicia a aplicação usando a porta definida por variável de ambiente (padrão Render)
+CMD ["sh", "-c", "uvicorn main:app --host 0.0.0.0 --port ${PORT:-8000}"]

@@ -1,0 +1,15 @@
+services:
+  - type: web
+    name: xer-api
+    runtime: docker
+    envVars:
+      - key: PORT
+        value: 8000
+      - key: ENVIRONMENT
+        value: production
+      - key: DATABASE_URL
+        value: sqlite:///./data/tales_db.sqlite
+    disk:
+      name: xer-data
+      mountPath: /app/data
+      sizeGB: 1

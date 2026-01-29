@@ -15,19 +15,39 @@ COPY pyproject.toml .
 RUN uv sync
 ## ---------- Production ---------- ##
 FROM python:3.13-slim-bookworm AS production
+# Instala bash para o entrypoint
+RUN apt-get update && apt-get install --no-install-recommends -y \
+        bash && \
+    apt-get clean && rm -rf /var/lib/apt/lists/*
+
 # Cria usuário não‑root
 RUN useradd --create-home appuser
-USER appuser
 WORKDIR /app
+
 # Copia código da aplicação e arquivos estáticos
 COPY --chown=appuser:appuser xer/ xer/
 COPY --chown=appuser:appuser main.py .
 COPY --chown=appuser:appuser static/ static/
+
 # Copia o virtual‑env gerado no builder
 COPY --from=builder /app/.venv .venv
 # Adiciona o virtual‑env ao PATH
 ENV PATH="/app/.venv/bin:${PATH}"
+
+# Prepara dados iniciais (backup para volumes vazios)
+COPY --chown=appuser:appuser data/ /app/data_initial/
+
+# Prepara o entrypoint
+COPY --chown=appuser:appuser scripts/entrypoint.sh /app/scripts/entrypoint.sh
+RUN chmod +x /app/scripts/entrypoint.sh
+
+# Garante permissões na pasta de dados (o volume será montado aqui)
+RUN mkdir -p /app/data && chown appuser:appuser /app/data
+
+USER appuser
+
 # Porta da API
 EXPOSE 8000
-# Inicia a aplicação usando a porta definida por variável de ambiente (padrão Render)
-CMD ["sh", "-c", "uvicorn main:app --host 0.0.0.0 --port ${PORT:-8000}"]
+
+# Usa o script de entrypoint para inicializar o banco e subir a API
+ENTRYPOINT ["/app/scripts/entrypoint.sh"]

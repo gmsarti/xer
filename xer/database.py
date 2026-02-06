@@ -44,7 +44,7 @@ def list_tales(limit: int = 20, offset: int = 0) -> list[dict[str, Any]]:
             cursor = conn.cursor()
             cursor.execute(
                 """
-                SELECT t.id, tr.title as title, tr.story_body as text, t.source as source
+                SELECT t.id, tr.title as title, tr.story_body as text, t.source as source, t.author as author, t.region as region
                 FROM tales t
                 JOIN tale_translations tr ON t.id = tr.tale_id
                 WHERE tr.language_code = 'en'
@@ -54,7 +54,26 @@ def list_tales(limit: int = 20, offset: int = 0) -> list[dict[str, Any]]:
                 (limit, offset),
             )
 
-            tales = [dict(row) for row in cursor.fetchall()]
+            tales = []
+            for row in cursor.fetchall():
+                tale_dict = dict(row)
+                author = tale_dict.get("author")
+                region = tale_dict.get("region")
+
+                metadata_parts = []
+                if author:
+                    metadata_parts.append(author)
+                if region:
+                    if author:
+                        metadata_parts.append(f"({region})")
+                    else:
+                        metadata_parts.append(region)
+
+                tale_dict["metadata"] = (
+                    " ".join(metadata_parts) if metadata_parts else None
+                )
+                tales.append(tale_dict)
+
             logger.debug(
                 f"Retrieved {len(tales)} tales (limit={limit}, offset={offset})"
             )
@@ -79,7 +98,7 @@ def get_tale(tale_id: int) -> dict[str, Any] | None:
             cursor = conn.cursor()
             cursor.execute(
                 """
-                SELECT t.id, tr.title as title, tr.story_body as text, t.source as source
+                SELECT t.id, tr.title as title, tr.story_body as text, t.source as source, t.author as author, t.region as region
                 FROM tales t
                 JOIN tale_translations tr ON t.id = tr.tale_id
                 WHERE t.id = ? AND tr.language_code = 'en'
@@ -89,7 +108,23 @@ def get_tale(tale_id: int) -> dict[str, Any] | None:
 
             row = cursor.fetchone()
             if row:
-                return dict(row)
+                tale_dict = dict(row)
+                author = tale_dict.get("author")
+                region = tale_dict.get("region")
+
+                metadata_parts = []
+                if author:
+                    metadata_parts.append(author)
+                if region:
+                    if author:
+                        metadata_parts.append(f"({region})")
+                    else:
+                        metadata_parts.append(region)
+
+                tale_dict["metadata"] = (
+                    " ".join(metadata_parts) if metadata_parts else None
+                )
+                return tale_dict
             return None
 
     except sqlite3.Error as e:
@@ -115,7 +150,7 @@ def search_tales(query: str = "", limit: int = 50) -> list[dict[str, Any]]:
                 # If no query, return recent tales
                 cursor.execute(
                     """
-                    SELECT t.id, tr.title as title, tr.story_body as text, t.source as source
+                    SELECT t.id, tr.title as title, tr.story_body as text, t.source as source, t.author as author, t.region as region
                     FROM tales t
                     JOIN tale_translations tr ON t.id = tr.tale_id
                     WHERE tr.language_code = 'en'
@@ -129,7 +164,7 @@ def search_tales(query: str = "", limit: int = 50) -> list[dict[str, Any]]:
                 search_pattern = f"%{query}%"
                 cursor.execute(
                     """
-                    SELECT t.id, tr.title as title, tr.story_body as text, t.source as source
+                    SELECT t.id, tr.title as title, tr.story_body as text, t.source as source, t.author as author, t.region as region
                     FROM tales t
                     JOIN tale_translations tr ON t.id = tr.tale_id
                     WHERE tr.language_code = 'en' AND (tr.title LIKE ? OR tr.story_body LIKE ?)
@@ -144,7 +179,26 @@ def search_tales(query: str = "", limit: int = 50) -> list[dict[str, Any]]:
                     (search_pattern, search_pattern, search_pattern, limit),
                 )
 
-            tales = [dict(row) for row in cursor.fetchall()]
+            tales = []
+            for row in cursor.fetchall():
+                tale_dict = dict(row)
+                author = tale_dict.get("author")
+                region = tale_dict.get("region")
+
+                metadata_parts = []
+                if author:
+                    metadata_parts.append(author)
+                if region:
+                    if author:
+                        metadata_parts.append(f"({region})")
+                    else:
+                        metadata_parts.append(region)
+
+                tale_dict["metadata"] = (
+                    " ".join(metadata_parts) if metadata_parts else None
+                )
+                tales.append(tale_dict)
+
             logger.debug(
                 f"Found {len(tales)} tales for query '{query}' (limit={limit})"
             )

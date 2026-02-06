@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends, HTTPException, Query
 from typing import List, Optional
 import sqlite3
 from xer.api.database import get_db
-from xer.api.models import TaleSummary, TaleDetail, TaleListResponse, Classification
+from xer.api.models import TaleSummary, TaleDetail, TaleListResponse
 
 router = APIRouter(prefix="/tales", tags=["Tales"])
 
@@ -27,7 +27,7 @@ async def list_tales(
     # Get tales joining with translations
     cursor = conn.execute(
         """
-        SELECT t.id, tr.title as titulo, t.source as origem, t.url 
+        SELECT t.id, tr.title as titulo, t.source as origem, t.url, t.author, t.region
         FROM tales t
         JOIN tale_translations tr ON t.id = tr.tale_id
         WHERE tr.language_code = 'en'
@@ -42,11 +42,28 @@ async def list_tales(
 
     tales = []
     for row in tales_rows:
+        author = row["author"]
+        region = row["region"]
+
+        metadata_parts = []
+        if author:
+            metadata_parts.append(author)
+        if region:
+            if author:
+                metadata_parts.append(f"({region})")
+            else:
+                metadata_parts.append(region)
+
+        metadata = " ".join(metadata_parts) if metadata_parts else None
+
         tales.append(
             TaleSummary(
                 id=row["id"],
                 titulo=row["titulo"],
-                origem=row["origem"],
+                author=author,
+                region=region,
+                source=row["origem"],
+                metadata=metadata,
                 url=row["url"],
                 classifications=classifications_map.get(row["id"], []),
             )
@@ -69,7 +86,7 @@ async def search_tales(
 
     query_parts = [
         """
-        SELECT DISTINCT t.id, tr.title as titulo, t.source as origem, t.url 
+        SELECT DISTINCT t.id, tr.title as titulo, t.source as origem, t.url, t.author, t.region
         FROM tales t
         JOIN tale_translations tr ON t.id = tr.tale_id
         """
@@ -117,11 +134,28 @@ async def search_tales(
 
     tales = []
     for row in tales_rows:
+        author = row["author"]
+        region = row["region"]
+
+        metadata_parts = []
+        if author:
+            metadata_parts.append(author)
+        if region:
+            if author:
+                metadata_parts.append(f"({region})")
+            else:
+                metadata_parts.append(region)
+
+        metadata = " ".join(metadata_parts) if metadata_parts else None
+
         tales.append(
             TaleSummary(
                 id=row["id"],
                 titulo=row["titulo"],
-                origem=row["origem"],
+                author=author,
+                region=region,
+                source=row["origem"],
+                metadata=metadata,
                 url=row["url"],
                 classifications=classifications_map.get(row["id"], []),
             )
@@ -163,7 +197,7 @@ async def search_keywords(
 async def get_tale(id: int, conn: sqlite3.Connection = Depends(get_db)):
     row = conn.execute(
         """
-        SELECT t.id, tr.title as titulo, t.source as origem, t.url, tr.story_body as texto_completo 
+        SELECT t.id, tr.title as titulo, t.source as origem, t.url, tr.story_body as texto_completo, t.author, t.region 
         FROM tales t
         JOIN tale_translations tr ON t.id = tr.tale_id
         WHERE t.id = ? AND tr.language_code = 'en'
@@ -176,10 +210,27 @@ async def get_tale(id: int, conn: sqlite3.Connection = Depends(get_db)):
 
     classifications_map = get_classifications_for_tales(conn, [id])
 
+    author = row["author"]
+    region = row["region"]
+
+    metadata_parts = []
+    if author:
+        metadata_parts.append(author)
+    if region:
+        if author:
+            metadata_parts.append(f"({region})")
+        else:
+            metadata_parts.append(region)
+
+    metadata = " ".join(metadata_parts) if metadata_parts else None
+
     return TaleDetail(
         id=row["id"],
         titulo=row["titulo"],
-        origem=row["origem"],
+        author=author,
+        region=region,
+        source=row["origem"],
+        metadata=metadata,
         url=row["url"],
         texto_completo=row["texto_completo"],
         classifications=classifications_map.get(id, []),

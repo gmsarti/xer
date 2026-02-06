@@ -15,6 +15,9 @@ class TaleSummary(BaseModel):
     source: Optional[str] = None
     metadata: Optional[str] = None
     url: str
+    selection_count: int = Field(
+        0, description="Number of times this tale was selected randomly"
+    )
     classifications: List[Classification] = []
 
     class Config:

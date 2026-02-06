@@ -27,7 +27,7 @@ async def list_tales(
     # Get tales joining with translations
     cursor = conn.execute(
         """
-        SELECT t.id, tr.title as titulo, t.source as origem, t.url, t.author, t.region
+        SELECT t.id, tr.title as titulo, t.source as origem, t.url, t.author, t.region, t.selection_count
         FROM tales t
         JOIN tale_translations tr ON t.id = tr.tale_id
         WHERE tr.language_code = 'en'
@@ -86,7 +86,7 @@ async def search_tales(
 
     query_parts = [
         """
-        SELECT DISTINCT t.id, tr.title as titulo, t.source as origem, t.url, t.author, t.region
+        SELECT DISTINCT t.id, tr.title as titulo, t.source as origem, t.url, t.author, t.region, t.selection_count
         FROM tales t
         JOIN tale_translations tr ON t.id = tr.tale_id
         """
@@ -193,11 +193,70 @@ async def search_keywords(
     return await search_tales(text=q, page=page, page_size=page_size, conn=conn)
 
 
+@router.get("/daily", response_model=TaleDetail)
+async def get_daily_tale():
+    from xer.database import get_or_create_daily_tale
+
+    tale = get_or_create_daily_tale()
+    if not tale:
+        raise HTTPException(status_code=404, detail="No tales found")
+
+    author = tale.get("author")
+    region = tale.get("region")
+    metadata = tale.get("metadata")
+
+    return TaleDetail(
+        id=tale["id"],
+        titulo=tale["title"],
+        author=author,
+        region=region,
+        source=tale["source"],
+        metadata=metadata,
+        url=tale.get("url", ""),
+        texto_completo=tale["text"],
+        selection_count=tale.get("selection_count", 0),
+        classifications=[],
+    )
+
+
+@router.get("/random", response_model=TaleDetail)
+async def get_random_tale(
+    seed: Optional[str] = Query(
+        None, description="Optional seed for reproducible randomization"
+    ),
+    increment: bool = Query(
+        True, description="Whether to increment the selection count"
+    ),
+):
+    from xer.database import get_random_tale
+
+    tale = get_random_tale(seed=seed, increment=increment)
+    if not tale:
+        raise HTTPException(status_code=404, detail="No tales found")
+
+    author = tale.get("author")
+    region = tale.get("region")
+    metadata = tale.get("metadata")
+
+    return TaleDetail(
+        id=tale["id"],
+        titulo=tale["title"],
+        author=author,
+        region=region,
+        source=tale["source"],
+        metadata=metadata,
+        url=tale.get("url", ""),
+        texto_completo=tale["text"],
+        selection_count=tale.get("selection_count", 0),
+        classifications=[],
+    )
+
+
 @router.get("/{id}", response_model=TaleDetail)
 async def get_tale(id: int, conn: sqlite3.Connection = Depends(get_db)):
     row = conn.execute(
         """
-        SELECT t.id, tr.title as titulo, t.source as origem, t.url, tr.story_body as texto_completo, t.author, t.region 
+        SELECT t.id, tr.title as titulo, t.source as origem, t.url, tr.story_body as texto_completo, t.author, t.region, t.selection_count
         FROM tales t
         JOIN tale_translations tr ON t.id = tr.tale_id
         WHERE t.id = ? AND tr.language_code = 'en'
@@ -233,5 +292,6 @@ async def get_tale(id: int, conn: sqlite3.Connection = Depends(get_db)):
         metadata=metadata,
         url=row["url"],
         texto_completo=row["texto_completo"],
+        selection_count=row["selection_count"],
         classifications=classifications_map.get(id, []),
     )

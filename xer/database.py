@@ -1,8 +1,10 @@
 """Database module for SQLite operations."""
 
 import sqlite3
+import random
+from datetime import date
 from pathlib import Path
-from typing import Any
+from typing import Any, Optional
 
 from xer.config import get_settings
 from xer.logger import logger
@@ -44,7 +46,7 @@ def list_tales(limit: int = 20, offset: int = 0) -> list[dict[str, Any]]:
             cursor = conn.cursor()
             cursor.execute(
                 """
-                SELECT t.id, tr.title as title, tr.story_body as text, t.source as source, t.author as author, t.region as region
+                SELECT t.id, tr.title as title, tr.story_body as text, t.source as source, t.author as author, t.region as region, t.selection_count
                 FROM tales t
                 JOIN tale_translations tr ON t.id = tr.tale_id
                 WHERE tr.language_code = 'en'
@@ -98,7 +100,7 @@ def get_tale(tale_id: int) -> dict[str, Any] | None:
             cursor = conn.cursor()
             cursor.execute(
                 """
-                SELECT t.id, tr.title as title, tr.story_body as text, t.source as source, t.author as author, t.region as region
+                SELECT t.id, tr.title as title, tr.story_body as text, t.source as source, t.author as author, t.region as region, t.selection_count
                 FROM tales t
                 JOIN tale_translations tr ON t.id = tr.tale_id
                 WHERE t.id = ? AND tr.language_code = 'en'
@@ -150,7 +152,7 @@ def search_tales(query: str = "", limit: int = 50) -> list[dict[str, Any]]:
                 # If no query, return recent tales
                 cursor.execute(
                     """
-                    SELECT t.id, tr.title as title, tr.story_body as text, t.source as source, t.author as author, t.region as region
+                    SELECT t.id, tr.title as title, tr.story_body as text, t.source as source, t.author as author, t.region as region, t.selection_count
                     FROM tales t
                     JOIN tale_translations tr ON t.id = tr.tale_id
                     WHERE tr.language_code = 'en'
@@ -164,7 +166,7 @@ def search_tales(query: str = "", limit: int = 50) -> list[dict[str, Any]]:
                 search_pattern = f"%{query}%"
                 cursor.execute(
                     """
-                    SELECT t.id, tr.title as title, tr.story_body as text, t.source as source, t.author as author, t.region as region
+                    SELECT t.id, tr.title as title, tr.story_body as text, t.source as source, t.author as author, t.region as region, t.selection_count
                     FROM tales t
                     JOIN tale_translations tr ON t.id = tr.tale_id
                     WHERE tr.language_code = 'en' AND (tr.title LIKE ? OR tr.story_body LIKE ?)
@@ -207,3 +209,109 @@ def search_tales(query: str = "", limit: int = 50) -> list[dict[str, Any]]:
     except sqlite3.Error as e:
         logger.error(f"Database error while searching tales: {e}")
         return []
+
+
+def get_random_tale(
+    seed: Optional[str] = None, increment: bool = True
+) -> dict[str, Any] | None:
+    """Get a random tale among those with the minimum selection_count.
+
+    Args:
+        seed: Optional seed for reproducible randomization.
+        increment: Whether to increment the selection count.
+
+    Returns:
+       Tale dictionary or None if error/no tales
+    """
+    try:
+        with get_connection() as conn:
+            cursor = conn.cursor()
+
+            # Find minimum selection count
+            cursor.execute("SELECT MIN(selection_count) FROM tales")
+            min_count_row = cursor.fetchone()
+            if min_count_row is None or min_count_row[0] is None:
+                min_count = 0
+            else:
+                min_count = min_count_row[0]
+
+            # Get all candidate IDs
+            cursor.execute(
+                "SELECT id FROM tales WHERE selection_count = ?", (min_count,)
+            )
+            candidate_ids = [row["id"] for row in cursor.fetchall()]
+
+            if not candidate_ids:
+                return None
+
+            # Seed and pick
+            if seed:
+                random.seed(seed)
+            tale_id = random.choice(candidate_ids)
+
+            if increment:
+                # Increment count
+                cursor.execute(
+                    "UPDATE tales SET selection_count = selection_count + 1 WHERE id = ?",
+                    (tale_id,),
+                )
+                conn.commit()
+
+            # Return the full tale data
+            return get_tale(tale_id)
+
+    except sqlite3.Error as e:
+        logger.error(f"Database error while fetching random tale: {e}")
+        return None
+
+
+def get_or_create_daily_tale() -> dict[str, Any] | None:
+    """Get the tale for today, creating it if it doesn't exist.
+
+    Returns:
+        The tale of the day or None
+    """
+    today = date.today().isoformat()
+    try:
+        with get_connection() as conn:
+            cursor = conn.cursor()
+
+            # Check if we already have a tale for today
+            cursor.execute("SELECT tale_id FROM daily_tales WHERE day = ?", (today,))
+            row = cursor.fetchone()
+            if row:
+                return get_tale(row["tale_id"])
+
+            # If not, get a new one (with increment)
+            # We use the date as seed to ensure consistency if multiple workers try to create it
+            # simultaneously (though incrementing might still happen twice if not careful,
+            # but ISO date seed helps keep it stable).
+            # Actually, the requirement says "salvar no banco toda vez que uma história foi selecionada randomicamente".
+            # For the daily tale, it's selected once per day.
+
+            tale = get_random_tale(increment=True)
+            if not tale:
+                return None
+
+            # Save to daily_tales
+            try:
+                cursor.execute(
+                    "INSERT INTO daily_tales (day, tale_id) VALUES (?, ?)",
+                    (today, tale["id"]),
+                )
+                conn.commit()
+            except sqlite3.IntegrityError:
+                # Another process might have inserted it just now
+                conn.rollback()
+                cursor.execute(
+                    "SELECT tale_id FROM daily_tales WHERE day = ?", (today,)
+                )
+                row = cursor.fetchone()
+                if row:
+                    return get_tale(row["tale_id"])
+
+            return tale
+
+    except sqlite3.Error as e:
+        logger.error(f"Database error while handling daily tale: {e}")
+        return None

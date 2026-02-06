@@ -5,7 +5,7 @@ from pydantic import BaseModel
 from fastapi.responses import HTMLResponse, JSONResponse
 
 from xer.templates_config import templates
-from xer.database import list_tales
+from xer.database import list_tales, get_or_create_daily_tale
 
 # Import sub-routers
 from . import tales as tales_router
@@ -18,7 +18,23 @@ router.include_router(tales_router.router, prefix="/api/v1", tags=["tales"])
 
 @router.get("/", response_class=HTMLResponse)
 async def homepage(request: Request) -> HTMLResponse:
-    """Render the homepage with a list of tales.
+    """Render the landing page with the daily tale.
+
+    Args:
+        request: FastAPI request object
+
+    Returns:
+        Rendered HTML template
+    """
+    daily_tale = get_or_create_daily_tale()
+    return templates.TemplateResponse(
+        "landing.html", {"request": request, "daily_tale": daily_tale}
+    )
+
+
+@router.get("/explore", response_class=HTMLResponse)
+async def explore(request: Request) -> HTMLResponse:
+    """Render the exploration page with a list of tales.
 
     Args:
         request: FastAPI request object

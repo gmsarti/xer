@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+
+{% block title %}Xer - Bem-vindo{% endblock %}
+
+{% block content %}
+<section class="hero hero-landing">
+    <div class="container">
+        <h2 class="hero-title">Bem-vindo ao Xer</h2>
+        <p class="hero-subtitle">
+            O projeto <strong>Xer</strong> é uma iniciativa dedicada à análise e preservação de contos de fadas, 
+            organizando-os através de padrões narrativos e morfologias estruturais. Explore nossa coleção para 
+            descobrir as conexões universais entre as histórias de diferentes regiões e autores.
+        </p>
+        
+        {% if daily_tale %}
+        <div class="daily-tale-featured">
+            <div class="card card-large">
+                <div class="card-content">
+                    <h3 class="card-title">{{ daily_tale.title }}</h3>
+                    {% if daily_tale.author or daily_tale.region %}
+                    <p class="card-meta">
+                        {% if daily_tale.author %}{{ daily_tale.author }}{% endif %}
+                        {% if daily_tale.author and daily_tale.region %} • {% endif %}
+                        {% if daily_tale.region %}{{ daily_tale.region }}{% endif %}
+                    </p>
+                    {% endif %}
+                    <div class="card-preview">
+                        {{ daily_tale.text[:500] }}{% if daily_tale.text|length > 500 %}...{% endif %}
+                    </div>
+                </div>
+                <div class="card-footer">
+                    <a href="/tales/{{ daily_tale.id }}" class="btn btn-primary btn-lg">Ler Conto Completo</a>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+
+    </div>
+</section>
+{% endblock %}
